@@ -1,0 +1,11 @@
+admin_container{
+    display: flex;
+    
+}
+.admin_container_1{
+   
+}
+.admin_container_2{
+   flex-grow: 1; /* This div will take up all remaining space */
+   width: 700px;
+}

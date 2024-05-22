@@ -1,0 +1,13 @@
+.card-body>a:hover{
+    color: rgb(61, 146, 72);
+}
+
+.card-body>a{
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+}
+.card{
+    height: 10%;
+    margin: 10px;
+}

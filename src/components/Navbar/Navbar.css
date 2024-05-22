@@ -1,0 +1,13 @@
+.navbar-light{
+    background-color: rgb(117, 159, 103);
+}
+
+li>a{
+    color:beige;
+    font-size: 25px;
+    text-decoration: none;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+li>a:hover{
+    color: brown;
+}
