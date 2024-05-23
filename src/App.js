@@ -4,6 +4,7 @@ import LandingPage from './components/LandingPage/LandingPage'
 import Admin from './components/Admin/Admin'
 import Doctor from './components/Doctor/Doctor'
 import Patient from './components/Patient/Patient'
+import AdminPostLogin from '../src/components/Admin/AdminPostLogin'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/doctor' element={<Doctor/>}/>
         <Route path='/patient' element={<Patient/>}/>
+        <Route path='/admin/login' element={<AdminPostLogin/>}/>
       </Routes>
     </div>
   );
