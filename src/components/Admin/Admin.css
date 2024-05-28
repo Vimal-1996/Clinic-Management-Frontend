@@ -1,6 +1,4 @@
-html,body{  
-    margin: 0%;
-}
+
 .maincontainer{
     display: flex;
     height: 100%;
@@ -44,7 +42,8 @@ html,body{
     text-decoration: none;
     color: black;
 }
-.container{
+
+.adm-container{
     position: absolute;
     top:30%;
     left: 15%;

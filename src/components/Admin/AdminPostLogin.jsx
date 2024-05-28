@@ -49,7 +49,7 @@ const AdminPostLogin = () => {
       </div>
       <div className="bodypart">
         <div className='m-4'><h3>Welcome Admin</h3></div>
-        <div className="container">
+        <div className="adm-container">
           {toggle == 1 ? <DashboardInfo/>:null}
           {toggle == 2 ? <DoctorInfo/>:null}
           {toggle == 3 ? <PatientInfo/>:null}
