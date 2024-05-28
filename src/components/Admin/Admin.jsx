@@ -4,10 +4,13 @@ import '../Admin/Admin.css'
 import { useState } from 'react'
 import { postAdminLogin } from './Apicalls'
 import { useNavigate } from 'react-router-dom'
+import { setCookie,getCookie } from '../../Storage/cookies'
+
 
 const Admin = () => {
   let navigate = useNavigate();
   const [info, setInfo] = useState({ email: "", password: "" })
+  const [error_message, setErrorMessage] = useState("")
 
   return (
     <div className='container mt-3'>
@@ -17,10 +20,18 @@ const Admin = () => {
         </div>
         <div className='admin_container_2'>
           <h2>Admin Login</h2>
+          <span><h4 style={{ color: "darkred" }}>{error_message}</h4></span>
           <form onSubmit={(e) => {
             e.preventDefault()
+            setErrorMessage("")
             setInfo({ ...info, email: "", password: "" })
-            postAdminLogin(info.email, info.password).then((message) => { console.log(message); navigate("/admin/login") }).catch((err) =>{console.log(err); navigate(-1)})
+            postAdminLogin(info.email, info.password).then((res) => {
+              setCookie(res.data.token.token,res.data.token.email)
+              navigate("/admin/login");
+            })
+              .catch((err) => {
+                setErrorMessage(err.response.data.message)
+              })
           }}>
 
             <div className="mb-3">

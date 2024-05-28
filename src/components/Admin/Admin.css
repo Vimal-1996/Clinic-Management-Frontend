@@ -1,11 +1,54 @@
-admin_container{
+html,body{  
+    margin: 0%;
+}
+.maincontainer{
     display: flex;
-    
+    height: 100%;
 }
-.admin_container_1{
-   
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
-.admin_container_2{
-   flex-grow: 1; /* This div will take up all remaining space */
-   width: 700px;
+.bodypart{
+    background-color: rgb(206, 206, 202);
+    flex: 6;
+    position: absolute;
+    min-height: 100%;
+    left: 14%;
+    width: 86%;
+}
+.sidebarheader{
+    padding-left: 1%;
+    padding-top: 4%;
+    background-color: rgb(235, 235, 232);
+    flex: 1;
+    position: absolute;
+    min-height: 35%;
+    min-width: 14%;
+}
+.sidebarfooter{
+    padding-left: 1%;
+    padding-top: 4%;
+    background-color: rgb(245, 248, 243);
+    flex: 7;
+    top:35%;
+    position: absolute;
+    min-height: 71%;
+    min-width: 14%;
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+.sidebarfooter a{
+    text-decoration: none;
+    color: black;
+}
+.container{
+    position: absolute;
+    top:30%;
+    left: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
