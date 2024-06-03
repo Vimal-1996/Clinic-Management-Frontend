@@ -13,15 +13,14 @@ const Admin = () => {
   const [error_message, setErrorMessage] = useState("")
 
   return (
-    <div className='container mt-3'>
-      <div className='admin_container'>
-        <div className='admin_container_1'>
-          <img src={adminImages.adminImage1} />
+    <div className='container-fluid d-flex justify-content-around mt-4 '>
+      <div className='row custom-row '>
+        <div className='col-sm-6 d-flex justify-content-center'>
+          <img src={adminImages.adminImage1} className='admin-image' />
         </div>
-        <div className='admin_container_2'>
-          <h2>Admin Login</h2>
-          <span><h4 style={{ color: "darkred" }}>{error_message}</h4></span>
-          <form onSubmit={(e) => {
+
+        <div className='col-sm-6 d-flex justify-content-center mt-4'>
+          <form className="input-form p-5 shadow" onSubmit={(e) => {
             e.preventDefault()
             setErrorMessage("")
             setInfo({ ...info, email: "", password: "" })
@@ -33,17 +32,22 @@ const Admin = () => {
                 setErrorMessage(err.response.data.message)
               })
           }}>
-
-            <div className="mb-3">
-              <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-              <input value={info.email} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='email' onChange={(e) => { setInfo({ ...info, email: e.target.value }) }} />
+            <div className=''>
+              <div className="mb-3">
+                <h3>Admin Login</h3>
+                <hr></hr>
+                <label for="exampleInputEmail1" className="fobel" rm-la>Email address</label>
+                <input type="email" value={info.email} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='email' onChange={(e) => { setInfo({ ...info, email: e.target.value }) }}/>
+                <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <div className="mb-3">
+                <label for="exampleInputPassword1" className="form-label">Password</label>
+                <input type="password" value={info.password} className="form-control" id="exampleInputPassword1" name='password' onChange={(e) => { setInfo({ ...info, password: e.target.value }) }}/>
+              </div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-              <input value={info.password} type="password" className="form-control" id="exampleInputPassword1" name='password' onChange={(e) => { setInfo({ ...info, password: e.target.value }) }} />
+            <div className=''>
+            <button type="submit" className="btn submit-btn text-white">Submit</button>
             </div>
-
-            <button type="submit" className="btn btn-success">Login</button>
           </form>
         </div>
       </div>

@@ -1,57 +1,71 @@
 import React from 'react'
 import '../LandingPage/LandingPage.css'
-import {LandingImages} from '../LandingPage/Images'
+import { LandingImages } from '../LandingPage/Images'
 
 const LandingPage = () => {
     return (
-        <div>
-            <div className="row">
-                <div className="container">
-                    <img src={LandingImages.backgroundImage}
-                        className='landingImage'
-                        style={{ "width": "100%", "maxHeight": "500px" }}
-                    />
-
-                    <div className="container" style={{"display":"flex"}}>
-                        <div className="col-md-4 m-3" style={{"height":"40px"}}>
-                            <div class="card" style={{ "width": "18rem", "margin":"35px" }}>
-                                <img src={LandingImages.adminImage} class="card-img-top" alt="..." style={{"height":"300px"}}/>
-                                <div class="card-body">
-                                    <h5 class="card-title" style={{"fontWeight":"bold"}}>Admin Login</h5>
-                                    <a href="/admin" class="btn btn-secondary">Admin Login</a>
-                                </div>
+        <div className='container-fluid d-flex justify-content-around mt-4 '>
+            <div className='row custom-row'>
+                <div class="col-md-3 mt-2 p-4 d-flex justify-content-center shadow-sm">
+                    <a href='/appointment'>
+                        <div class="card p-3" style={{ "width": "14rem" }}>
+                            <div className='d-flex justify-content-center'>
+                                <img src={LandingImages.appointments} class="card-img-top" alt="..." />
+                            </div>
+                            <div class="card-body d-flex justify-content-center">
+                                <h6 class="card-title">Book Appointment</h6>
                             </div>
                         </div>
-
-                        <div className="col-md-4 m-3">
-                            <div class="card" style={{ "width": "18rem","margin":"35px"}}>
-                                <img src={LandingImages.doctorImage} class="card-img-top" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title" style={{"fontWeight":"bold"}}>Doctor Login</h5>
-                                   
-                                    <a href="/doctor" class="btn btn-secondary">Doctor Login</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-4 m-3">
-                            <div class="card" style={{ "width": "18rem", "margin":"35px" }}>
-                                <img src={LandingImages.patientImage} class="card-img-top" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title" style={{"fontWeight":"bold"}}>Patient Login</h5>
-                                    <a href="/patient" class="btn btn-secondary">Patient Login</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    </a>
                 </div>
 
+                <div class="col-md-3  mt-2 p-4 d-flex justify-content-center shadow-sm">
+                    <a href='/admin'>
+                        <div class="card p-3" style={{ "width": "14rem" }}>
+                            <div className='d-flex justify-content-center'>
+                                <img src={LandingImages.adminImage} class="card-img-top" alt="..." />
+                            </div>
+                            <div class="card-body d-flex justify-content-center">
+                                <h5 class="card-title">Admin Login</h5>
 
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
+                <div class="col-md-3  mt-2 p-4 d-flex justify-content-center shadow-sm">
+                    <a href='/doctor'>
+                        <div class="card p-3 d-flex" style={{ "width": "14rem" }}>
+                            <div className='d-flex justify-content-center'>
+                                <img src={LandingImages.doctorImage} class="card-img-top" alt="..." />
+                            </div>
+                            <div class="card-body d-flex justify-content-center">
+                                <h5 class="card-title">Doctor Login</h5>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3  mt-2 p-4 d-flex justify-content-center shadow-sm">
+                    <a href='/patient'>
+                        <div class="card p-3" style={{ "width": "14rem" }}>
+                            <div className='d-flex justify-content-center'>
+                                <img src={LandingImages.patientImage} class="card-img-top" alt="..." />
+                            </div>
+                            <div class="card-body d-flex justify-content-center">
+                                <h5 class="card-title">User Login</h5>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
+
     )
 }
+
+
 
 export default LandingPage

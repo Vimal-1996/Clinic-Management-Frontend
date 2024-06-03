@@ -1,3 +1,3 @@
 export const adminImages = {
-    adminImage1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRganXVTfP-m2A5uEEohF3ked9kdmNUunjGvA&s"
+    adminImage1: "https://www.apollohospitals.com/wp-content/themes/apollohospitals/assets-v3/images/whychoseapollo_ah.webp"
 }

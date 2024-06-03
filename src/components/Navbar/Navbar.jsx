@@ -3,61 +3,54 @@ import '../Navbar/Navbar.css'
 import { getCookie } from '../../Storage/cookies'
 
 const Navbar = () => {
-    const [user,setUser] = useState("")
+    const [user, setUser] = useState("")
 
-    useEffect(()=>{
-        if(getCookie().emailCookie!=null){ 
+    useEffect(() => {
+        if (getCookie().emailCookie != null) {
             setUser(getCookie().emailCookie)
-        }else{
+        } else {
             setUser("Login")
         }
     })
 
     return (
-        <div>
-            <nav className="navbar navbar-light ">
-                <div className="container-fluid">
-                    <a className="navbar-brand" style={{"color":"white", "fontSize":"25px"}} href='/'>Clinic Management System</a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
 
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className=""  aria-current="page" href='/doctor'>Doctor Login</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className=""  aria-current="page" href='/patient'>Patient Login</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className=""  aria-current="page"href='/admin'>Admin Login</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/*<div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className=""aria-current="page"href='/admin'>{user}</a> 
-                            </li>
-                        </ul>
-                    </div>*/}
-                    
+        <div className='container-fluid '>
+            <nav class="navbar navbar-light navbar-expand-lg bg-gradient">
+                <div class="container-fluid d-flex justify-content-center">
+                    <a class="navbar-brand text-white" href='/'>Denta-Care</a>
                 </div>
+                <div class="container-fluid justify-content-center">
+                    <form class="row ">
+                        <div class="col-md-6 mt-2">
+                            <input type="text" class="form-control" id="inputPassword2" placeholder="Search Doctors" />
+                        </div>
+                        <div class="col-md-6  mt-2">
+                            <button type="submit" class="btn btn-primary mb-3">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="container-fluid justify-content-start ">
+                    <div className="row">
+                        <div className="col md-6">
+                            <span className="d-block p-2 text-white mt-2">Emergency Number </span>
+                            <button type="button" class="btn btn-light my-2">1066</button>
+                        </div>
+                        <div className="col md-6 ">
+                            <span className="d-block p-2 text-white mt-2">Denta-care life line</span>
+                            <button type="button" class="btn btn-light my-2" style={{ width: "150px" }}>1860-500-1066</button>
+                        </div>
+                    </div>
+                </div>
+
             </nav>
+            <div className='seperator'>
+
+            </div>
         </div>
     )
 }
 
 export default Navbar
+
+
