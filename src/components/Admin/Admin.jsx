@@ -23,8 +23,8 @@ const Admin = () => {
           <form className="input-form p-5 shadow" onSubmit={(e) => {
             e.preventDefault()
             setErrorMessage("")
-            setInfo({ ...info, email: "", password: "" })
             postAdminLogin(info.email, info.password).then((res) => {
+              console.log(res.data.token)
               setCookie(res.data.token.token,res.data.token.email)
               navigate("/admin/login");
             })

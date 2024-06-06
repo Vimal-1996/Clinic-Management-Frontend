@@ -65,7 +65,7 @@ const AdminPostLogin = () => {
 
         </div>
 
-        <div className='col-sm-9'>
+        <div className='col-sm-9 d-flex align-items-center'>
           {toggle==1? <DashboardInfo/> : null}
           {toggle==2? <AppointmentInfo/> : null}
           {toggle==3? <DoctorInfo/> : null}
