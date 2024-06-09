@@ -6,22 +6,33 @@ import DoctorInfo from './DoctorInfo'
 import DashboardInfo from './DashboardInfo'
 import PatientInfo from './PatientInfo'
 import AppointmentInfo from './AppointmentInfo'
+import { getPatientDetails } from './Apicalls'
 
 const AdminPostLogin = () => {
   const [user, setUser] = useState("")
   const [toggle, setToggle] = useState(1)
+  const [patients,setPatients] = useState([])
 
-  function changeStatus(status) {
-    setToggle(status)
-  }
+  
+  
 
-  useEffect(() => {
+  useEffect(()=>{
     if (getCookie().emailCookie != null) {
       setUser(getCookie().emailCookie)
     } else {
       setUser("Login")
     }
-  })
+    getPatientDetails()
+    .then((response)=>{ setPatients( response.data)})
+    .catch((error_details)=>{console.log(error_details)})
+  },[])
+
+
+  function changeStatus(status) {
+    setToggle(status)
+  }
+
+  
   return (
 
     <div className='container-fluid1 d-flex justify-content-around mt-4 '>
@@ -47,29 +58,40 @@ const AdminPostLogin = () => {
 
           <div className='p-3'>
             <div className='col-sm-12 d-flex justify-content-start  shadow profile-details '>
-              <a className='btn' onClick={()=>changeStatus(1)}><h3 className='px-3 py-1'>Dashboard</h3></a>
+              <a className='btn' onClick={() => changeStatus(1)}><h3 className='px-3 py-1'>Dashboard</h3></a>
             </div>
 
             <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-              <a className='btn' onClick={()=>changeStatus(2)}> <h3 className='px-3 py-1'>Appointments</h3></a>
+              <a className='btn' onClick={() => changeStatus(2)}> <h3 className='px-3 py-1'>Appointments</h3></a>
             </div>
 
             <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-              <a className='btn ' onClick={()=>changeStatus(3)}> <h3 className='px-3 py-1'>Doctors</h3></a>
+              <a className='btn ' onClick={() => changeStatus(3)}> <h3 className='px-3 py-1'>Doctors</h3></a>
             </div>
 
             <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-              <a className='btn ' onClick={()=>changeStatus(4)}> <h3 className='px-3 py-1'>Patients</h3></a>
+              <a className='btn ' onClick={() => changeStatus(4)}> <h3 className='px-3 py-1'>Patients</h3></a>
             </div>
           </div>
 
         </div>
 
-        <div className='col-sm-9 d-flex align-items-center'>
-          {toggle==1? <DashboardInfo/> : null}
-          {toggle==2? <AppointmentInfo/> : null}
-          {toggle==3? <DoctorInfo/> : null}
-          {toggle==4? <PatientInfo/> : null}
+        <div className='col-sm-9 '>
+          <div className='d-flex justify-content-center align-items-center'>
+            {toggle == 1 ? <DashboardInfo /> : null}
+          </div>
+
+          <div>
+            {toggle == 2 ? <AppointmentInfo /> : null}
+          </div>
+
+          <div>
+            {toggle == 3 ? <DoctorInfo  /> : null}
+          </div>
+
+          <div>
+            {toggle == 4 ? <PatientInfo data = {patients}/> : null}
+          </div>
         </div>
 
       </div>
