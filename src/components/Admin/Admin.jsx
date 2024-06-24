@@ -1,5 +1,5 @@
 import React from 'react'
-import { adminImages } from './images'
+import { adminImages } from './assets'
 import '../Admin/Admin.css'
 import { useState } from 'react'
 import { postAdminLogin } from './Apicalls'

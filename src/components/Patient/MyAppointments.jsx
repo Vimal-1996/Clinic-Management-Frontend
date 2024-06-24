@@ -1,100 +1,103 @@
-import React, { useEffect, useState } from 'react'
-import { addAppointmentDetails } from './Apicalls'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
+import { addNewAppointment, getDoctorDetails, getUserAppointments } from './Apicalls'
 
-const AppointmentInfo = (props) => {
-
-  const [appointmentDate, setAppointmentDate] = useState("")
+const MyAppointments = ({ data1 }) => {
+  const [doctors, setDoctors] = useState([])
+  const [appointments, setAppointments] = useState([])
+  const [appointmentDate, setappointmentDate] = useState("")
+  const [session, setSession] = useState("")
   const [appointmentTime, setAppointmentTime] = useState("")
-  const [session, setSession] = useState("");
-  const [doctorName, setDoctorName] = useState("");
-  const [patientName, setPatientName] = useState("");
+  const [doctorName, setDoctorName] = useState("")
+  const [patientName, setPatientName] = useState(data1)
 
   useEffect(() => {
+    getDoctorDetails()
+      .then((response) => { setDoctors(response.data.doctors); })
+      .catch((error_details) => { console.log(error_details) })
 
+    getUserAppointments(data1)
+      .then((response) => { setAppointments(response.data.appointments); })
+      .catch((error_details) => { console.log(error_details) })
   }, [])
 
-  const handleAppointmentModalSubmit = async (e) => {
-    e.preventDefault();
-    const appointmentData = {
-      appointmentDate,
-      appointmentTime,
-      session,
-      doctorName,
-      patientName
-    }
+  // useEffect(() => {
+  //   console.log("appointments called")
+  // }, [appointments])
 
-    await addAppointmentDetails(appointmentData)
-      .then((res) => { window.location.reload() })
+  const handleAppointmentModalSubmit = (e) => {
+    e.preventDefault()
+    const appointmentInfo = { appointmentDate, appointmentTime, session, doctorName, patientName }
+    addNewAppointment(appointmentInfo)
+      .then((response) => { console.log(response.data); window.location.reload(); })
       .catch((err) => { console.log(err) })
-
-
   }
+
   const handleAppointmentDate = (e) => {
-    setAppointmentDate(e.target.value)
-  }
-
-  const handleSession = (e) => {
-    setSession(e.target.value)
+    setappointmentDate(e.target.value)
   }
 
   const handleAppointmentTime = (e) => {
     setAppointmentTime(e.target.value)
   }
 
+
   const handleDoctorName = (e) => {
     setDoctorName(e.target.value)
   }
+
   const handlePatientName = (e) => {
-    setPatientName(e.target.value)
+    setPatientName(data1)
   }
+
+  const handleSession = (e) => {
+    setSession(e.target.value)
+  }
+
+
 
   return (
     <div className='container-fluid'>
+      <div className="alert alert-danger" role='alert'>
+        <a href='' className='btn btn-danger' data-bs-toggle="modal" data-bs-target="#addAppointmentModal"><h3 className=''>Add Appointments</h3></a>
+      </div>
+
       <div className="row">
         <div className="col-sm-12">
-          <h2>List of Appointments</h2>
+          <h2>My Appointments</h2>
           <div className="row mt-3">
-            <div className="col-sm-6 d-flex justify-content-start">
-              <a href='' data-bs-toggle="modal" data-bs-target="#addAppointmentModal"><h3 className=''>Add Appointments</h3></a>
-            </div>
-            <div className="col-sm-6 d-flex justify-content-end">
-              <a href=''><h3 className=''>Search Appointments</h3></a>
-            </div>
-
             <div className='container-fluid '>
               <div className="row  ">
+                <div className="col-sm-4"  >
+                  <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
+                    <div className="card-body shadow" >
+                      <div className="row">
 
-                {
-                  props.data3.appointments.map((elem, index) => {
-                    return (
-                      <div className="col-sm-4"  >
-                        <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
-                          <div className="card-body shadow" >
-                            <div className="row">
+                        {
+                          appointments.map((element, index) => {
+                            return (
                               <div className="col-sm-12 " style={{ height: "200px", paddingBottom: "10px" }}>
-                                <h4 className="">Appointment Date : {elem.appointmentDate}</h4>
-                                <h4 className="">Session :{elem.session}</h4>
-                                <h4 className="">Time :{elem.time}</h4>
-                                <h4 className="">Doctor Name : {elem.doctorDetails.doctorName}</h4>
-                                <h4 className="">Patient Name :{elem.patientDetails.patientName}</h4>
-                                <h4 className="">Appointment Ref Id :{elem.appointmentRefid}</h4>
+                                <h4 className="">Appointment Date :{element.appointmentDate} </h4>
+                                <h4 className="">Session :{element.session}</h4>
+                                <h4 className="">Time :{element.time}</h4>
+                                <h4 className="">Doctor Name :{element.doctorName} </h4>
+                                <h4 className="">Patient Name :{element.patientName}</h4>
+                                {/* <h4 className="">Appointment Ref Id :{element.referenceId}</h4> */}
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })
-                }
+                            )
+                          })
+                        }
 
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-
-
-
           </div>
         </div>
       </div>
+
 
       {/* Add Appointment Modal */}
       <div className="modal fade" id="addAppointmentModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
@@ -136,31 +139,17 @@ const AppointmentInfo = (props) => {
                       <select value={doctorName} onChange={(e) => handleDoctorName(e)} className="form-select" aria-label="Default select example" >
                         <option value="" >Select Option</option>
                         {
-                          props.data1.doctors.map((item, index) => {
+                          doctors.map((item, index) => {
                             return (
                               <option value={item._id}>{item.doctorName}</option>
                             )
                           })
                         }
+
                       </select>
                     </div>
                   </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Patient Name</label>
-                    <div className="dropdown mt-0">
-                      <select value={patientName} onChange={(e) => handlePatientName(e)} className="form-select" aria-label="Default select example"  >
-                        <option value="" >Select Option</option>
-                        {
-                          props.data2.patients.map((item, index) => {
-                            return (
-                              <option value={item._id}>{item.patientName}</option>
-                            )
-                          })
-                        }
-                      </select>
-                    </div>
-                  </div>
 
                   <div className="modal-footer">
                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -175,7 +164,8 @@ const AppointmentInfo = (props) => {
         </div>
       </div>
     </div>
+
   )
 }
 
-export default AppointmentInfo
+export default MyAppointments

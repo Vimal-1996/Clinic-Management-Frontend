@@ -4,11 +4,28 @@ import PatientImages from './image'
 import { LandingImages } from '../LandingPage/Images'
 import { useNavigate } from 'react-router-dom'
 import '../Patient/Patient.css'
+import { userLogin } from './Apicalls'
 
 const Patient = () => {
   let navigate = useNavigate();
-  const [info, setInfo] = useState({ email: "", password: "" })
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [error_message, setErrorMessage] = useState("")
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value)
+  }
+  const handlePassword = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const UserLoginInfo = { email, password }
+    await userLogin(UserLoginInfo)
+      .then((res) => { navigate("/patient/login",{state:res.data.patient});})
+      .catch((err) => { console.log(err) })
+  }
 
   return (
     <div className='container-fluid d-flex justify-content-around mt-4 '>
@@ -18,21 +35,21 @@ const Patient = () => {
         </div>
 
         <div className='col-sm-6 d-flex justify-content-center mt-4'>
-          <form className="input-form p-5 shadow" >
+          <form className="input-form p-5 shadow" onSubmit={(e) => handleFormSubmit(e)}>
             <div className=''>
-              <div class="mb-3">
+              <div className="mb-3">
                 <h3>Patient Login</h3>
                 <hr></hr>
-                <label for="exampleInputEmail1" class="fobel" rm-la>Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                <label htmlFor="exampleInputEmail1" className="form-label" >Email address</label>
+                <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={email} onChange={(e) => handleEmail(e)} />
+
               </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" />
+              <div className="mb-3">
+                <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={(e) => handlePassword(e)} />
               </div>
             </div>
-            <button type="submit" class="btn submit-btn text-white">Submit</button>
+            <button type="submit" className="btn submit-btn text-white">Submit</button>
           </form>
         </div>
       </div>

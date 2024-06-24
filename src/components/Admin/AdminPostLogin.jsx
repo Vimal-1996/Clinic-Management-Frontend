@@ -1,38 +1,51 @@
 import React, { useEffect, useState } from 'react'
 import { getCookie } from '../../Storage/cookies'
 import '../../components/Admin/AdminPostLogin.css'
-import { adminImages } from '../Admin/images'
+import { adminImages } from '../Admin/assets'
 import DoctorInfo from './DoctorInfo'
 import DashboardInfo from './DashboardInfo'
 import PatientInfo from './PatientInfo'
 import AppointmentInfo from './AppointmentInfo'
-import { getPatientDetails } from './Apicalls'
+import { getPatientDetails} from './Apicalls'
+import { getDoctorDetails } from './Apicalls'
+import { getAllAppointments } from './Apicalls'
+
 
 const AdminPostLogin = () => {
   const [user, setUser] = useState("")
   const [toggle, setToggle] = useState(1)
-  const [patients,setPatients] = useState([])
+  const [patients, setPatients] = useState([])
+  const [doctors, setDoctors] = useState([])
+  const [appointments,setAppointments] = useState([])
 
-  
-  
-
-  useEffect(()=>{
+  useEffect(() => {
     if (getCookie().emailCookie != null) {
       setUser(getCookie().emailCookie)
     } else {
       setUser("Login")
     }
     getPatientDetails()
-    .then((response)=>{ setPatients( response.data)})
-    .catch((error_details)=>{console.log(error_details)})
-  },[])
+      .then((response) => { setPatients(response.data);})
+      .catch((error_details) => { console.log(error_details) })
 
+    getDoctorDetails()
+      .then((response) => { setDoctors(response.data) ;})
+      .catch((error_details) => { console.log(error_details) })
+
+    getAllAppointments()
+    .then((appointment_res)=>{setAppointments(appointment_res.data);})
+    .catch((err)=>{console.log(err)})
+  }, [])
 
   function changeStatus(status) {
     setToggle(status)
   }
 
-  
+  function handleChildResponse(data){
+    setToggle(data)
+  }
+
+
   return (
 
     <div className='container-fluid1 d-flex justify-content-around mt-4 '>
@@ -78,19 +91,19 @@ const AdminPostLogin = () => {
 
         <div className='col-sm-9 '>
           <div className='d-flex justify-content-center align-items-center'>
-            {toggle == 1 ? <DashboardInfo /> : null}
+            {toggle == 1 ? <DashboardInfo data1={doctors} data2={patients} data3={appointments}/> : null}
           </div>
 
           <div>
-            {toggle == 2 ? <AppointmentInfo /> : null}
+            {toggle == 2 ? <AppointmentInfo data1={doctors} data2={patients} data3={appointments}/> : null}
           </div>
 
           <div>
-            {toggle == 3 ? <DoctorInfo  /> : null}
+            {toggle == 3 ? <DoctorInfo data ={doctors}/> : null}
           </div>
 
           <div>
-            {toggle == 4 ? <PatientInfo data = {patients}/> : null}
+            {toggle == 4 ? <PatientInfo data={patients}  /> : null}
           </div>
         </div>
 

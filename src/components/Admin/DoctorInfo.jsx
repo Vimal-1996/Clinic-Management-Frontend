@@ -1,50 +1,182 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMarker, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { doctorSpecialised, doctorSpeciality } from './assets';
+import { addNewDoctorDetails } from './Apicalls';
+import '../Admin/Admin.css'
 
-const DoctorInfo = () => {
-  const [isChecked,setIsChecked] = useState(1)
-  const handleSwitchChange = ()=>{
-    setIsChecked(!isChecked)
+const DoctorInfo = (props) => {
+  const [isCheckedArray, setIsCheckedArray] = useState([]);
+  const [specialisedValue, setSpecialisedValue] = useState("")
+  const [specialityValue, setSpecialityValue] = useState("")
+  const [doctorName,setDoctorName] = useState("")
+
+  const handleSwitchChange = (event, index) => {
+    const newIsCheckedArray = [...isCheckedArray]
+    newIsCheckedArray[index] = !newIsCheckedArray[index];
+    setIsCheckedArray(newIsCheckedArray)
+    console.log(isCheckedArray)
   }
+
+  const handleEdit = (e) => {
+
+  }
+
+  const handleDelete = (e) => {
+
+  }
+  const handleSpecialisedChange=(e)=>{
+    setSpecialisedValue(e.target.value)  
+  }
+
+  const handleSpecialityChange=(e)=>{
+    setSpecialityValue(e.target.value)
+  }
+
+  const handleDoctorModalSubmit = async(e) => {
+    e.preventDefault();
+    console.log("doctor modal called")
+    const newDoctorDetails={
+      doctorName:doctorName,
+      specialised:specialisedValue,
+      speciality:specialityValue
+    }
+    console.log(newDoctorDetails)
+    await addNewDoctorDetails(newDoctorDetails)
+    .then((response)=>{window.location.reload()})
+    .catch((err)=>{console.log(err)})
+  }
+
+  const handleDoctorName = (e)=>{
+    setDoctorName(e.target.value)
+  }
+
+  useEffect(() => {
+    const fetchData = () => {
+      const newIsCheckedArray = props.data.doctors.map(doctor => doctor.accountStatus);
+      setIsCheckedArray(newIsCheckedArray)
+    }
+    fetchData();
+  }, [props.data.doctors])
+
+  useEffect(()=>{
+    console.log("effect called1:"+specialisedValue)
+  },[specialisedValue])
+
+  useEffect(()=>{
+    console.log("effect called2:"+specialityValue)
+  },[specialityValue])
+
 
   return (
     <div className='container-fluid'>
-      <div class="row">
-        <div class="col-sm-12">
+      <div className="row">
+        <div className="col-sm-12">
           <h2>List of Doctors</h2>
           <div className="row mt-3">
             <div className="col-sm-6 d-flex justify-content-start">
-              <a href=''><h3 className=''>Add Doctors</h3></a>
+              <a href='' data-bs-toggle="modal" data-bs-target="#addDoctorModal"><h3 className=''>Add Doctors</h3></a>
             </div>
             <div className="col-sm-6 d-flex justify-content-end">
               <a href=''><h3 className=''>Search Doctors</h3></a>
             </div>
             <div className="col-sm-12 mt-4">
-              <table class="table table-hover">
+              <table className="table table-hover">
                 <thead>
                   <tr>
                     <th scope="col">sl.no</th>
                     <th scope="col">Doctor Name</th>
                     <th scope="col">Specialised</th>
                     <th scope="col">Speciality</th>
-                    <th scope='col'>Account Status</th>
+                    <th scope="col">Account Status</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td style={{fontSize:"20px"}}>Mark</td>
-                    <td style={{fontSize:"20px"}}>Otto</td>
-                    <td style={{fontSize:"20px"}}>@mdo</td>
-                    <td style={{fontSize:"20px"}}><div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked= {isChecked} onChange={handleSwitchChange}/>
-                      <label class="form-check-label" for="flexSwitchCheckChecked">Operational</label>
-                    </div></td>
-                    <td style={{fontSize:"20px"}}>@mdo</td>
-                  </tr>
+                  {props.data.doctors.map((item, index) => (
+                    <tr key={index}>
+                      <th style={{ fontSize: "20px" }} scope="row">{index + 1}</th>
+                      <td style={{ fontSize: "20px" }}>{item.doctorName}</td>
+                      <td style={{ fontSize: "20px" }}>{item.specialised}</td>
+                      <td style={{ fontSize: "20px" }}>{item.speciality}</td>
+                      <td><div className="form-check form-switch">
+                        <input className="form-check-input" type="checkbox" id={`flexSwitchCheckChecked${index}`} checked={isCheckedArray[index]} onChange={(e) => handleSwitchChange(e, index)} />
+                        <label className="form-check-label" htmlFor="flexSwitchCheckChecked">{isCheckedArray[index] ? "Active" : "Inactive"}</label>
+                      </div></td>
+                      <td style={{ fontSize: "20px" }}>
+                        <div className='row'>
+                          <div className='col-sm-6'>
+                            <FontAwesomeIcon icon={faMarker} onClick={(e) => handleEdit()} />
+                          </div>
+                          <div className='col-sm-6'>
+                            <FontAwesomeIcon icon={faTrash} onClick={(e) => handleDelete()} />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add doctor Modal */}
+      <div class="modal fade" id="addDoctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="exampleModalLabel">Add Doctor</h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div className="row p-4">
+                <form className='' onSubmit={(e) => handleDoctorModalSubmit(e)}>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Doctor Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='doctorNameInput' value={doctorName} onChange={(e)=>handleDoctorName(e)}/>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Specialised</label>
+                    <div class=" mt-0">
+                      <select value={specialisedValue} class="form-select" aria-label="Default select example" onChange={(e)=>handleSpecialisedChange(e)}>
+                        <option >Select Option</option>
+                        {
+                          doctorSpecialised.specialised.map((spec, index) => {
+                            return (
+                              <option value={spec}>{spec}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Speciality</label>
+                    <div class="dropdown mt-0">
+                      <select value={specialityValue} class="form-select" aria-label="Default select example" onChange={handleSpecialityChange}>
+                        <option value="" >Select Option</option>
+                        {
+                          doctorSpeciality.speciality.map((spec, index) => {
+                            return (
+                              <option value={spec}>{spec}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" style={{ backgroundColor: "#007c9d" }}>Add Doctor</button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>
