@@ -21,9 +21,11 @@ const MyAppointments = ({ data1 }) => {
       .catch((error_details) => { console.log(error_details) })
   }, [])
 
-  // useEffect(() => {
-  //   console.log("appointments called")
-  // }, [appointments])
+
+  const cancelAppointment=(appointmentId)=>{
+    console.log("cancel appointment")
+    console.log(appointmentId)
+  }
 
   const handleAppointmentModalSubmit = (e) => {
     e.preventDefault()
@@ -67,31 +69,32 @@ const MyAppointments = ({ data1 }) => {
           <h2>My Appointments</h2>
           <div className="row mt-3">
             <div className='container-fluid '>
-              <div className="row  ">
-                <div className="col-sm-4"  >
-                  <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
-                    <div className="card-body shadow" >
-                      <div className="row">
-
-                        {
-                          appointments.map((element, index) => {
-                            return (
-                              <div className="col-sm-12 " style={{ height: "200px", paddingBottom: "10px" }}>
+              <div className="row">
+                {
+                  appointments.map((element, index) => {
+                    return (
+                      <div className="col-sm-4"  >
+                        <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
+                          <div className="card-body shadow" >
+                            <div className="row">
+                              <div className="col-sm-12 " style={{ height: "290px", paddingBottom: "10px" }}>
                                 <h4 className="">Appointment Date :{element.appointmentDate} </h4>
                                 <h4 className="">Session :{element.session}</h4>
                                 <h4 className="">Time :{element.time}</h4>
-                                <h4 className="">Doctor Name :{element.doctorName} </h4>
-                                <h4 className="">Patient Name :{element.patientName}</h4>
-                                {/* <h4 className="">Appointment Ref Id :{element.referenceId}</h4> */}
+                                <h4 className="">Doctor Name :{element.doctorDetails.doctorName} </h4>
+                                <h4 className="">Patient Name :{element.patientDetails.patientName}</h4>
+                                <h4 className="">Appointment Ref Id :{element.appointmentRefid}</h4>
+                                <h4 className="">Appointment Status :{element.appointmentStatus}</h4>
+                                <button className='btn btn-danger' onClick={()=>cancelAppointment(element._id)}>Cancel Appointment</button>
                               </div>
-                            )
-                          })
-                        }
-
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    )
+                  })
+                }
+
               </div>
             </div>
           </div>

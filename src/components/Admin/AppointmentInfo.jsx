@@ -78,6 +78,7 @@ const AppointmentInfo = (props) => {
                                 <h4 className="">Doctor Name : {elem.doctorDetails.doctorName}</h4>
                                 <h4 className="">Patient Name :{elem.patientDetails.patientName}</h4>
                                 <h4 className="">Appointment Ref Id :{elem.appointmentRefid}</h4>
+                                
                               </div>
                             </div>
                           </div>
