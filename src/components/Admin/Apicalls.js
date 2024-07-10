@@ -50,10 +50,18 @@ export const addAppointmentDetails = (appointmentDetails) => {
     })
 }
 
-export const getAllAppointments = ()=>{
-    return new Promise(async(resolve,reject)=>{
+export const getAllAppointments = () => {
+    return new Promise(async (resolve, reject) => {
         await axios.get('http://localhost:5000/admin/allappointments')
-        .then((get_result)=>{resolve(get_result)})
-        .catch((err)=>{reject(err)})
+            .then((get_result) => { resolve(get_result) })
+            .catch((err) => { reject(err) })
+    })
+}
+
+export const updateAppointmentStatus = (referenceId,appointmentStatus) => {
+    return new Promise(async (resolve, reject) => {
+        await axios.post('http://localhost:5000/admin/updateappointmentstatus', {referenceId,appointmentStatus})
+            .then((result) => { resolve(result) })
+            .catch((err) => { reject(err) })
     })
 }

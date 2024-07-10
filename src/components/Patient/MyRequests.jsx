@@ -24,10 +24,10 @@ const MyRequests = ({ data1 }) => {
             <div className="row">
               {
                 appointments.map((element, index) => {
-                  if (element.appointmentStatus !== 'Confirmed') {
+                  if (element.appointmentStatus !== 'confirmed') {
                     return (
                       <div key={index}  className="col-sm-4"  >
-                        <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
+                        <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px", margin:"10px" }}>
                           <div className="card-body shadow" >
                             <div className="row">
                               <div className="col-sm-12 " style={{ height: "290px", paddingBottom: "10px" }}>
@@ -37,7 +37,7 @@ const MyRequests = ({ data1 }) => {
                                 <h4 className="">Doctor Name :{element.doctorDetails.doctorName} </h4>
                                 <h4 className="">Patient Name :{element.patientDetails.patientName}</h4>
                                 <h4 className="">Appointment Ref Id :{element.appointmentRefid}</h4>
-                                <h4 className="">Appointment Status :{element.appointmentStatus}</h4>
+                                <button className='btn btn-warning'><h4 className="">Appointment Status :{element.appointmentStatus}</h4></button>
 
                               </div>
                             </div>

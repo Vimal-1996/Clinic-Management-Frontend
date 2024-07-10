@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { addAppointmentDetails } from './Apicalls'
+import { updateAppointmentStatus } from './Apicalls'
 
 const AppointmentInfo = (props) => {
 
@@ -48,6 +49,14 @@ const AppointmentInfo = (props) => {
     setPatientName(e.target.value)
   }
 
+  const changeAppointmentStatus = (referenceId,appointmentStatus)=>{
+    console.log(referenceId);
+    updateAppointmentStatus(referenceId,appointmentStatus)
+    .then((res)=>{window.location.reload()})
+    .catch((err)=>{console.log(err)})
+
+  }
+
   return (
     <div className='container-fluid'>
       <div className="row">
@@ -68,17 +77,18 @@ const AppointmentInfo = (props) => {
                   props.data3.appointments.map((elem, index) => {
                     return (
                       <div className="col-sm-4"  >
-                        <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
+                        <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px", margin:"10px" }}>
                           <div className="card-body shadow" >
                             <div className="row">
-                              <div className="col-sm-12 " style={{ height: "200px", paddingBottom: "10px" }}>
+                              <div className="col-sm-12 " style={{ height: "290px", paddingBottom: "10px" }}>
                                 <h4 className="">Appointment Date : {elem.appointmentDate}</h4>
                                 <h4 className="">Session :{elem.session}</h4>
                                 <h4 className="">Time :{elem.time}</h4>
                                 <h4 className="">Doctor Name : {elem.doctorDetails.doctorName}</h4>
                                 <h4 className="">Patient Name :{elem.patientDetails.patientName}</h4>
                                 <h4 className="">Appointment Ref Id :{elem.appointmentRefid}</h4>
-                                
+                                <h4 className=''>Appointment Status :{elem.appointmentStatus}</h4>
+                                <button className='btn btn-warning' onClick={()=>changeAppointmentStatus(elem.appointmentRefid,elem.appointmentStatus)}>Change Status</button>
                               </div>
                             </div>
                           </div>

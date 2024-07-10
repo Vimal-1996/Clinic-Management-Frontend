@@ -17,7 +17,7 @@ const MyAppointments = ({ data1 }) => {
       .catch((error_details) => { console.log(error_details) })
 
     getUserAppointments(data1)
-      .then((response) => { setAppointments(response.data.appointments); })
+      .then((response) => { setAppointments(response.data.appointments);  })
       .catch((error_details) => { console.log(error_details) })
   }, [])
 
@@ -72,10 +72,10 @@ const MyAppointments = ({ data1 }) => {
               <div className="row">
                 {
                   appointments.map((element, index) => {
-                    if (element.appointmentStatus === "Confirmed") {
+                    if (element.appointmentStatus === "confirmed") {
                       return (
                         <div key={index} className="col-sm-4"  >
-                          <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px" }}>
+                          <div className="card" style={{ width: "450px", paddingTop: "10px", paddingBottom: "20px", margin:"10px" }}>
                             <div className="card-body shadow" >
                               <div className="row">
                                 <div className="col-sm-12 " style={{ height: "290px", paddingBottom: "10px" }}>

@@ -9,6 +9,8 @@ const MyAccountEdit = ({ data1 }) => {
     email: '',
     password: ''
   });
+  var id;
+  const [alertBoxStatus, setAlertBoxStatus] = useState(false)
 
   useEffect(() => {
     getPatientDetails(data1)
@@ -19,10 +21,16 @@ const MyAccountEdit = ({ data1 }) => {
   }, [data1])
 
   const handleEditPatientInfoSubmit = (e) => {
- 
+
     e.preventDefault();
     editPatientDetails(patient)
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        setAlertBoxStatus(true)
+
+        setTimeout(()=>{
+          setAlertBoxStatus(false)
+        },1000)
+      })
       .catch((err) => console.log(err))
 
   }
@@ -36,6 +44,10 @@ const MyAccountEdit = ({ data1 }) => {
   return (
     <div className="container-fluid">
       <div className="row d-flex justify-content-center">
+        {
+          alertBoxStatus && <InfoEditAlertBox/>
+        }
+        
         <div className="col-md-9 p-3" style={{ backgroundColor: "#C3CFD8", borderRadius: "20px" }}>
           <form className='' onSubmit={(e) => handleEditPatientInfoSubmit(e)}>
             <div className="mb-3">
@@ -70,6 +82,14 @@ const MyAccountEdit = ({ data1 }) => {
         </div>
 
       </div>
+    </div>
+  )
+}
+
+const InfoEditAlertBox = () => {
+  return (
+    <div class="alert alert-dark d-flex justify-content-center" role="alert">
+      <h3>Details Updated</h3>
     </div>
   )
 }
