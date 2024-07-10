@@ -31,3 +31,21 @@ export const getUserAppointments = (userId) => {
             .catch((err) => { reject(err) })
     })
 }
+
+export const getPatientDetails = (userId)=>{
+    return new Promise((resolve,reject)=>{
+        axios.get(`http://localhost:5000/patient/getpatientdetails?id=${userId}`)
+        .then((res)=>resolve(res))
+        .catch((err)=>{reject(err)})
+    })
+}
+
+export const editPatientDetails = (userInfo)=>{
+    console.log(userInfo)
+    return new Promise((resolve,reject)=>{
+        axios.post('http://localhost:5000/patient/savepatientdetails',{userInfo})
+        .then((res)=>resolve(res))
+        .catch((err)=>reject(err))
+    })
+}
+

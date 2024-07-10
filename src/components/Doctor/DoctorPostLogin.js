@@ -1,24 +1,39 @@
-import React, { useEffect, useState } from 'react'
-import { patientImages } from './assets'
-import { useLocation } from 'react-router-dom'
-import MyAccountEdit from './MyAccountEdit'
-import MyAppointments from './MyAppointments'
-import MyRequests from './MyRequests'
-import MyResults from './MyResults'
+import React from 'react'
+import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { doctorImages } from './images';
+import Appointments from './Appointments'
+import Bookings from './Bookings';
+import MyPatients from './MyPatients'
+import Results from './Results';
 
-const PatientPostLogin = () => {
 
+const DoctorPostLogin = () => {
     const location = useLocation();
-    const [_id, setId] = useState("")
-    const [patientName, setPatientName] = useState("")
-    const [email, setEmail] = useState("")
+    const [_id, setId] = useState("");
+    const [doctorName, setDoctorName] = useState("");
+    const [email, setEmail] = useState("");
     const [toggle, setToggle] = useState(1);
 
+    const setLocalStorage = async () => {
+        await setId(location.state ? location.state._id : {})
+        await setDoctorName(location.state ? location.state.doctorName : {})
+        await setEmail(location.state ? location.state.email : {})
+
+        if (location.state && location.state._id && location.state.doctorName && location.state.email) {
+            localStorage.setItem('appointmentData', JSON.stringify({
+                _id: location.state._id,
+                doctorName: location.state.doctorName,
+                doctorEmail: location.state.email
+            }));
+        }
+    }
+
     useEffect(() => {
-        setId(location.state ? location.state._id : {})
-        setPatientName(location.state ? location.state.patientName : {})
-        setEmail(location.state ? location.state.email : {})
-    }, [location.state])
+        setLocalStorage();
+    }, [])
+
     function changeStatus(status) {
         setToggle(status)
     }
@@ -37,11 +52,11 @@ const PatientPostLogin = () => {
 
                         <div className='col-sm-12 '>
                             <div className='col-sm-12 d-flex justify-content-center'>
-                                <img src={patientImages.patientImage1} className='admin-image-postlogin' />
+                                <img src={doctorImages.doctorImage1} className='admin-image-postlogin' />
                             </div>
                             <hr></hr>
                             <div className='col-sm-12 d-flex justify-content-center'>
-                                <h4 className=''>{patientName}</h4>
+                                <h4 className=''>{doctorName}</h4>
                             </div>
                             <hr></hr>
                             <div className='col-sm-12 d-flex justify-content-center'>
@@ -52,16 +67,16 @@ const PatientPostLogin = () => {
 
                     <div className='p-3'>
                         <div className='col-sm-12 d-flex justify-content-start  shadow profile-details '>
-                            <a className='btn' onClick={() => changeStatus(1)}><h3 className='px-3 py-1'>My Account</h3></a>
+                            <a className='btn' onClick={() => changeStatus(1)}><h3 className='px-3 py-1'>Appointments</h3></a>
 
                         </div>
 
                         <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-                            <a className='btn' onClick={() => changeStatus(2)}> <h3 className='px-3 py-1'>My Appointments</h3></a>
+                            <a className='btn' onClick={() => changeStatus(2)}> <h3 className='px-3 py-1'>Bookings</h3></a>
                         </div>
 
                         <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-                            <a className='btn ' onClick={() => changeStatus(3)}> <h3 className='px-3 py-1'>My Requests</h3></a>
+                            <a className='btn ' onClick={() => changeStatus(3)}> <h3 className='px-3 py-1'>My Patients</h3></a>
                         </div>
 
                         <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
@@ -77,20 +92,21 @@ const PatientPostLogin = () => {
 
                 <div className='col-sm-9 '>
                     <div className=''>
-                        {toggle === 1 ? <MyAccountEdit data1={_id}/> : null}
+                        {toggle === 1 ? <Appointments doctorId={_id} /> : null}
                     </div>
 
                     <div>
-                        {toggle === 2 ? <MyAppointments data1={_id}/> : null}
+                        {toggle === 2 ? <Bookings doctorId={_id} /> : null}
                     </div>
 
                     <div>
-                        {toggle === 3 ? <MyRequests data1={_id}/> : null}
+                        {toggle === 3 ? <MyPatients doctorId={_id} /> : null}
                     </div>
 
                     <div>
-                        {toggle === 4 ? <MyResults /> : null}
+                        {toggle === 4 ? <Results doctorId={_id} /> : null}
                     </div>
+
                 </div>
 
             </div>
@@ -98,4 +114,4 @@ const PatientPostLogin = () => {
     )
 }
 
-export default PatientPostLogin
+export default DoctorPostLogin
