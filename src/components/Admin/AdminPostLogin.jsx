@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCookie } from '../../Storage/cookies'
+import { getCookie, deletecookie, setCookie } from '../../Storage/cookies'
 import '../../components/Admin/AdminPostLogin.css'
 import { adminImages } from '../Admin/assets'
 import DoctorInfo from './DoctorInfo'
@@ -9,9 +9,12 @@ import AppointmentInfo from './AppointmentInfo'
 import { getPatientDetails} from './Apicalls'
 import { getDoctorDetails } from './Apicalls'
 import { getAllAppointments } from './Apicalls'
+import { useNavigate } from 'react-router-dom'
+
 
 
 const AdminPostLogin = () => {
+  let navigate = useNavigate();
   const [user, setUser] = useState("")
   const [toggle, setToggle] = useState(1)
   const [patients, setPatients] = useState([])
@@ -19,11 +22,6 @@ const AdminPostLogin = () => {
   const [appointments,setAppointments] = useState([])
 
   useEffect(() => {
-    if (getCookie().emailCookie != null) {
-      setUser(getCookie().emailCookie)
-    } else {
-      setUser("Login")
-    }
     getPatientDetails()
       .then((response) => { setPatients(response.data);})
       .catch((error_details) => { console.log(error_details) })
@@ -44,6 +42,11 @@ const AdminPostLogin = () => {
   function handleChildResponse(data){
     setToggle(data)
   }
+  
+  function handleLogoutFunctionality(){
+    deletecookie(getCookie().token)
+    navigate("/admin")
+  }
 
 
   return (
@@ -58,13 +61,10 @@ const AdminPostLogin = () => {
               <div className='col-sm-12 d-flex justify-content-center'>
                 <img src={adminImages.adminImage1} className='admin-image-postlogin' />
               </div>
+              
               <hr></hr>
               <div className='col-sm-12 d-flex justify-content-center'>
-                <h4 className=''>Vimal</h4>
-              </div>
-              <hr></hr>
-              <div className='col-sm-12 d-flex justify-content-center'>
-                <h4 className=''>Vimal.j.mathew@gmail.com</h4>
+                <h4 className=''>{getCookie().emailCookie}</h4>
               </div>
             </div>
           </div>
@@ -84,6 +84,10 @@ const AdminPostLogin = () => {
 
             <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
               <a className='btn ' onClick={() => changeStatus(4)}> <h3 className='px-3 py-1'>Patients</h3></a>
+            </div>
+
+            <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
+              <a className='btn' onClick={()=>handleLogoutFunctionality()}> <h3 className='px-3 py-1'>Log Out</h3></a>
             </div>
           </div>
 

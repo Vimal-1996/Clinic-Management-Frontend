@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMarker, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { doctorSpecialised, doctorSpeciality } from './assets';
-import { addNewDoctorDetails } from './Apicalls';
+import { addNewDoctorDetails, deleteDoctor, editDoctorDetails } from './Apicalls';
 import '../Admin/Admin.css'
+import { useNavigate } from 'react-router-dom';
 
 const DoctorInfo = (props) => {
   const [isCheckedArray, setIsCheckedArray] = useState([]);
   const [specialisedValue, setSpecialisedValue] = useState("")
   const [specialityValue, setSpecialityValue] = useState("")
-  const [doctorName,setDoctorName] = useState("")
+  const [doctorName, setDoctorName] = useState("")
+  const [id, setId] = useState("")
+  const navigate = useNavigate();
 
   const handleSwitchChange = (event, index) => {
     const newIsCheckedArray = [...isCheckedArray]
@@ -18,37 +21,49 @@ const DoctorInfo = (props) => {
     console.log(isCheckedArray)
   }
 
-  const handleEdit = (e) => {
-
+  const handleEdit = (elem) => {
+    setId(elem._id)
+    setDoctorName(elem.doctorName)
+    setSpecialisedValue(elem.specialised)
+    setSpecialityValue(elem.speciality)
   }
 
-  const handleDelete = (e) => {
+  const handleDelete = async (id) => {
+    await deleteDoctor(id)
+      .then((res) => window.location.reload())
+      .catch((err) => console.log(err))
 
   }
-  const handleSpecialisedChange=(e)=>{
-    setSpecialisedValue(e.target.value)  
+  const handleSpecialisedChange = (e) => {
+    setSpecialisedValue(e.target.value)
   }
 
-  const handleSpecialityChange=(e)=>{
+  const handleSpecialityChange = (e) => {
     setSpecialityValue(e.target.value)
   }
 
-  const handleDoctorModalSubmit = async(e) => {
+  const handleDoctorModalSubmit = async (e) => {
     e.preventDefault();
-    console.log("doctor modal called")
-    const newDoctorDetails={
-      doctorName:doctorName,
-      specialised:specialisedValue,
-      speciality:specialityValue
+    const newDoctorDetails = {
+      doctorName: doctorName,
+      specialised: specialisedValue,
+      speciality: specialityValue
     }
-    console.log(newDoctorDetails)
     await addNewDoctorDetails(newDoctorDetails)
-    .then((response)=>{window.location.reload()})
-    .catch((err)=>{console.log(err)})
+      .then((response) => { window.location.reload() })
+      .catch((err) => { console.log(err) })
   }
 
-  const handleDoctorName = (e)=>{
+  const handleDoctorName = (e) => {
     setDoctorName(e.target.value)
+  }
+
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
+    await editDoctorDetails({ id, doctorName, specialisedValue, specialityValue })
+      .then((res) => {console.log("captured");window.location.reload()})
+      .catch((err) => console.log(err))
+
   }
 
   useEffect(() => {
@@ -59,13 +74,13 @@ const DoctorInfo = (props) => {
     fetchData();
   }, [props.data.doctors])
 
-  useEffect(()=>{
-    console.log("effect called1:"+specialisedValue)
-  },[specialisedValue])
+  useEffect(() => {
+    console.log("effect called1:" + specialisedValue)
+  }, [specialisedValue])
 
-  useEffect(()=>{
-    console.log("effect called2:"+specialityValue)
-  },[specialityValue])
+  useEffect(() => {
+    console.log("effect called2:" + specialityValue)
+  }, [specialityValue])
 
 
   return (
@@ -106,10 +121,10 @@ const DoctorInfo = (props) => {
                       <td style={{ fontSize: "20px" }}>
                         <div className='row'>
                           <div className='col-sm-6'>
-                            <FontAwesomeIcon icon={faMarker} onClick={(e) => handleEdit()} />
+                            <a href='' data-bs-toggle="modal" data-bs-target="#editDoctorModal" onClick={() => handleEdit(item)}> <FontAwesomeIcon icon={faMarker} /> </a>
                           </div>
                           <div className='col-sm-6'>
-                            <FontAwesomeIcon icon={faTrash} onClick={(e) => handleDelete()} />
+                            <FontAwesomeIcon icon={faTrash} onClick={(e) => handleDelete(item._id)} />
                           </div>
                         </div>
                       </td>
@@ -135,12 +150,12 @@ const DoctorInfo = (props) => {
                 <form className='' onSubmit={(e) => handleDoctorModalSubmit(e)}>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Doctor Name</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='doctorNameInput' value={doctorName} onChange={(e)=>handleDoctorName(e)}/>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='doctorNameInput' value={doctorName} onChange={(e) => handleDoctorName(e)} />
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Specialised</label>
                     <div class=" mt-0">
-                      <select value={specialisedValue} class="form-select" aria-label="Default select example" onChange={(e)=>handleSpecialisedChange(e)}>
+                      <select value={specialisedValue} class="form-select" aria-label="Default select example" onChange={(e) => handleSpecialisedChange(e)}>
                         <option >Select Option</option>
                         {
                           doctorSpecialised.specialised.map((spec, index) => {
@@ -180,6 +195,68 @@ const DoctorInfo = (props) => {
           </div>
         </div>
       </div>
+
+
+      {/*Edit Doctor Modal */}
+
+      <div class="modal fade" id="editDoctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="exampleModalLabel">Edit Doctor</h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div className="row p-4">
+                <form className='' onSubmit={(e) => handleSaveChanges(e)}>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Doctor Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='doctorNameInput' value={doctorName} readOnly />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Specialised</label>
+                    <div class=" mt-0">
+                      <select value={specialisedValue} class="form-select" aria-label="Default select example" onChange={(e) => handleSpecialisedChange(e)}>
+                        <option >Select Option</option>
+                        {
+                          doctorSpecialised.specialised.map((spec, index) => {
+                            return (
+                              <option value={spec}>{spec}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Speciality</label>
+                    <div class="dropdown mt-0">
+                      <select value={specialityValue} class="form-select" aria-label="Default select example" onChange={handleSpecialityChange}>
+                        <option value="" >Select Option</option>
+                        {
+                          doctorSpeciality.speciality.map((spec, index) => {
+                            return (
+                              <option value={spec}>{spec}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" style={{ backgroundColor: "#007c9d" }}>Save Changes</button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 }

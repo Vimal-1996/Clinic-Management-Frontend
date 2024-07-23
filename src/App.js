@@ -8,8 +8,11 @@ import AdminPostLogin from '../src/components/Admin/AdminPostLogin'
 import PatientPostLogin from '../src/components/Patient/PatientPostLogin'
 import DoctorPostLogin from './components/Doctor/DoctorPostLogin';
 import Prescriptions from './components/Doctor/Prescriptions';
+import {deletecookie, getCookie} from '../src/Storage/cookies'
 
 function App() {
+  
+
   return (
     <div className="App">
       <Navbar/>

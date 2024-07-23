@@ -2,51 +2,71 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import axios from 'axios';
 //import AddPatientModal from './AddPatientModal';
-import { doctorSpecialised,doctorSpeciality } from './assets';
+import { doctorSpecialised, doctorSpeciality } from './assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMarker, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { addNewDoctorDetails, addNewPatientDetails } from './Apicalls';
+import { addNewDoctorDetails, addNewPatientDetails, deletePatient, editDoctorDetails, editPatientDetails } from './Apicalls';
 import { useNavigate } from 'react-router-dom';
 
 const PatientInfo = (props) => {
   const navigate = useNavigate();
   const [isCheckedArray, setIsCheckedArray] = useState([]);
   const [isModalOpen, setIsModalopen] = useState(false)
-  const [patientName,setPatientName] = useState("")
-  const [patientAge,setPatientAge] = useState("")
-  const [patientMobileNumber,setPatientMobileNumber] = useState("")
+  const [patientName, setPatientName] = useState("")
+  const [patientAge, setPatientAge] = useState("")
+  const [patientMobileNumber, setPatientMobileNumber] = useState("")
+  const [id,setPatientId] = useState("")
 
 
-  const handleEdit = (e) => {
-    console.log("inside handle edit")
+  const handleEdit = (item) => {
+    setPatientName(item.patientName)
+    setPatientAge(item.age)
+    setPatientMobileNumber(item.mobileNumber)
+    setPatientId(item._id)
   }
 
-  const handleDelete = (e) => {
-    console.log("inside handle delete")
+  const handleDelete = async (id) => {
+    await deletePatient(id)
+      .then((res) => window.location.reload())
+      .catch((err) => console.log(err))
+
   }
 
-  const handlePatientName = (e)=>{
+  const handlePatientName = (e) => {
     setPatientName(e.target.value)
   }
 
-  const handlePatientAge = (e)=>{
+  const handlePatientAge = (e) => {
     setPatientAge(e.target.value)
   }
 
-  const handlePatientMobileNumber = (e) =>{
+  const handlePatientMobileNumber = (e) => {
     setPatientMobileNumber(e.target.value)
   }
 
-  const handlePatientModalSubmit= async(e)=>{
+  const handlePatientModalSubmit = async (e) => {
     e.preventDefault();
     const patientDetails = {
-      patientName:patientName,
-      patientAge:patientAge,
-      patientMobileNumber:patientMobileNumber
+      patientName: patientName,
+      patientAge: patientAge,
+      patientMobileNumber: patientMobileNumber
     }
     await addNewPatientDetails(patientDetails)
-    .then((response)=>{ window.location.reload()})
-    .catch((err)=>{console.log(err)})
+      .then((response) => { window.location.reload() })
+      .catch((err) => { console.log(err) })
+  }
+
+  const editPatientModalSubmit = async (e) => {
+    e.preventDefault()
+    let patientDetails = {
+      id:id,
+      patientName: patientName,
+      age: patientAge,
+      mobileNumber: patientMobileNumber
+    }
+    await editPatientDetails(patientDetails)
+      .then(() => window.location.reload())
+      .catch((err) => console.log(err))
   }
 
   const handleSwitchChange = (event, index) => {
@@ -106,10 +126,10 @@ const PatientInfo = (props) => {
                       <td style={{ fontSize: "20px" }}>
                         <div className='row'>
                           <div className='col-sm-6' >
-                            <FontAwesomeIcon icon={faMarker} onClick={(e) => handleEdit()} />
+                            <a href='#' data-bs-toggle="modal" data-bs-target="#editPatientModal" onClick={(e) => handleEdit(item)}><FontAwesomeIcon icon={faMarker} /></a>
                           </div>
                           <div className='col-sm-6'>
-                            <FontAwesomeIcon icon={faTrash} onClick={(e) => handleDelete()} />
+                            <FontAwesomeIcon icon={faTrash} onClick={(e) => handleDelete(item._id)} />
                           </div>
                         </div>
                       </td>
@@ -131,21 +151,21 @@ const PatientInfo = (props) => {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            <div className="row p-4">
-                <form className='' onSubmit={(e)=>handlePatientModalSubmit(e)}>
+              <div className="row p-4">
+                <form className='' onSubmit={(e) => handlePatientModalSubmit(e)}>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Patient Name</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={patientName} onChange={(e)=>handlePatientName(e)}/>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={patientName} onChange={(e) => handlePatientName(e)} />
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Age</label>
-                    <input type="Number" class="form-control" id="exampleInputSpecialised" min={1} max={110} value={patientAge} onChange={(e)=>handlePatientAge(e)}/>
-                    
+                    <input type="Number" class="form-control" id="exampleInputSpecialised" min={1} max={110} value={patientAge} onChange={(e) => handlePatientAge(e)} />
+
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Mobile Number</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1"  value={patientMobileNumber} onChange={(e)=>handlePatientMobileNumber(e)}/>
-                    
+                    <input type="text" class="form-control" id="exampleInputEmail1" value={patientMobileNumber} onChange={(e) => handlePatientMobileNumber(e)} />
+
                   </div>
 
                   <div class="modal-footer">
@@ -155,11 +175,48 @@ const PatientInfo = (props) => {
                 </form>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>
 
+      {/*Edit Patient Modal */}
+      <div class="modal fade" id="editPatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="exampleModalLabel">Edit Patient</h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div className="row p-4">
+                <form className='' onSubmit={(e) => editPatientModalSubmit(e)}>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Patient Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={patientName} readOnly />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Age</label>
+                    <input type="Number" class="form-control" id="exampleInputSpecialised" min={1} max={110} value={patientAge} onChange={(e) => handlePatientAge(e)} />
+
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Mobile Number</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" value={patientMobileNumber} onChange={(e) => handlePatientMobileNumber(e)} />
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" style={{ backgroundColor: "#007c9d" }}>Save Patient</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

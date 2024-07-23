@@ -53,7 +53,6 @@ const DashboardInfo = (props) => {
                 </div>
 
                 <div className="col-sm-4 d-flex justify-content-center" >
-                   
                         <div className="card " style={{ width: "400px" }}>
                             <div className="card-body shadow">
                                 <div className="row">

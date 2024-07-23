@@ -24,7 +24,7 @@ const Admin = () => {
             e.preventDefault()
             setErrorMessage("")
             postAdminLogin(info.email, info.password).then((res) => {
-              setCookie(res.data.token.token,res.data.token.email)
+              setCookie(res.data.token.token,res.data.token.email,res.data.token.refreshToken)
               navigate("/admin/login");
             })
               .catch((err) => {
