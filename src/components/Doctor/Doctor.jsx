@@ -21,6 +21,7 @@ const Doctor = () => {
 
   const handleDoctorSubmit = async(e) => {
     e.preventDefault();
+    console.log()
     await doctorLogin(doctorDetails)
       .then((res) => { {console.log(res.data.doctor);navigate("/doctor/login", { state: res.data.doctor }) }})
       .catch((err) => console.log(err))
