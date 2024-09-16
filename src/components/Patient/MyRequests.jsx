@@ -5,6 +5,8 @@ import { getUserAppointments } from './Apicalls'
 const MyRequests = ({ data1 }) => {
   const [appointments, setAppointments] = useState([])
   const [pendingAppointments, setPendingAppointments] = useState([])
+
+
   
   useEffect(() => {
     getUserAppointments(data1)

@@ -54,7 +54,7 @@ const LandingPage = () => {
                                 <img src={LandingImages.patientImage} class="card-img-top" alt="..." />
                             </div>
                             <div class="card-body d-flex justify-content-center">
-                                <h5 class="card-title">User Login</h5>
+                                <h5 class="card-title">Patient Login</h5>
 
                             </div>
                         </div>

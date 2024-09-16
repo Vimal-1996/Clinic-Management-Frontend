@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { patientImages } from './assets'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import MyAccountEdit from './MyAccountEdit'
 import MyAppointments from './MyAppointments'
 import MyRequests from './MyRequests'
 import MyResults from './MyResults'
+import Cookies from "js-cookie"
 
 const PatientPostLogin = () => {
 
     const location = useLocation();
+    const navigate = useNavigate();
     const [_id, setId] = useState("")
     const [patientName, setPatientName] = useState("")
     const [email, setEmail] = useState("")
@@ -18,12 +20,24 @@ const PatientPostLogin = () => {
         setId(location.state ? location.state._id : {})
         setPatientName(location.state ? location.state.patientName : {})
         setEmail(location.state ? location.state.email : {})
+        Cookies.set("userId", _id)
+        Cookies.set("patientName",patientName)
+        Cookies.set("PatientEmail", email)
     }, [location.state])
+
     function changeStatus(status) {
         setToggle(status)
     }
 
     function handleChildResponse(data) {
+
+    }
+
+    function handleLogoutFunc(){
+        Cookies.remove("userId")
+        Cookies.remove("patientName")
+        Cookies.remove("PatientEmail")
+        navigate("/patient")
 
     }
 
@@ -69,7 +83,7 @@ const PatientPostLogin = () => {
                         </div>
 
                         <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-                            <a className='btn ' > <h3 className='px-3 py-1'>Log out</h3></a>
+                            <a className='btn ' onClick={()=> handleLogoutFunc()}> <h3 className='px-3 py-1'>Log out</h3></a>
                         </div>
                     </div>
 
@@ -89,7 +103,7 @@ const PatientPostLogin = () => {
                     </div>
 
                     <div>
-                        {toggle === 4 ? <MyResults /> : null}
+                        {toggle === 4 ? <MyResults data1={_id}/> : null}
                     </div>
                 </div>
 

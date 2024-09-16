@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { doctorImages } from './images';
@@ -7,9 +7,11 @@ import Appointments from './Appointments'
 import Bookings from './Bookings';
 import MyPatients from './MyPatients'
 import Results from './Results';
+import Cookies from "js-cookie"
 
 
 const DoctorPostLogin = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const [_id, setId] = useState("");
     const [doctorName, setDoctorName] = useState("");
@@ -40,6 +42,13 @@ const DoctorPostLogin = () => {
 
     function handleChildResponse(data) {
 
+    }
+
+    const handleLogoutFunc=()=>{
+        if(localStorage.getItem('appointmentData')){
+         localStorage.removeItem('appointmentData')  
+        }
+        navigate('/')
     }
 
     return (
@@ -79,12 +88,12 @@ const DoctorPostLogin = () => {
                             <a className='btn ' onClick={() => changeStatus(3)}> <h3 className='px-3 py-1'>My Patients</h3></a>
                         </div>
 
-                        <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
+                        {/* <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
                             <a className='btn ' onClick={() => changeStatus(4)}> <h3 className='px-3 py-1'>My Results</h3></a>
-                        </div>
+                        </div> */}
 
                         <div className='col-sm-12 d-flex justify-content-start  shadow profile-details'>
-                            <a className='btn ' > <h3 className='px-3 py-1'>Log out</h3></a>
+                            <a className='btn ' onClick={()=>handleLogoutFunc()}> <h3 className='px-3 py-1'>Log out</h3></a>
                         </div>
                     </div>
 
@@ -103,9 +112,9 @@ const DoctorPostLogin = () => {
                         {toggle === 3 ? <MyPatients doctorId={_id} /> : null}
                     </div>
 
-                    <div>
+                    {/* <div>
                         {toggle === 4 ? <Results doctorId={_id} /> : null}
-                    </div>
+                    </div> */}
 
                 </div>
 

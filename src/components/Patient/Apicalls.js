@@ -26,26 +26,38 @@ export const addNewAppointment = (appointmentDetails) => {
 
 export const getUserAppointments = (userId) => {
     return new Promise((resolve, reject) => {
-        axios.post('http://localhost:5000/patient/getappointments',{userId})
+        axios.post('http://localhost:5000/patient/getappointments', { userId })
             .then((res) => resolve(res))
             .catch((err) => { reject(err) })
     })
 }
 
-export const getPatientDetails = (userId)=>{
-    return new Promise((resolve,reject)=>{
+export const getPatientDetails = (userId) => {
+    return new Promise((resolve, reject) => {
         axios.get(`http://localhost:5000/patient/getpatientdetails?id=${userId}`)
-        .then((res)=>resolve(res))
-        .catch((err)=>{reject(err)})
+            .then((res) => resolve(res))
+            .catch((err) => { reject(err) })
     })
 }
 
-export const editPatientDetails = (userInfo)=>{
+export const editPatientDetails = (userInfo) => {
     console.log(userInfo)
-    return new Promise((resolve,reject)=>{
-        axios.post('http://localhost:5000/patient/savepatientdetails',{userInfo})
-        .then((res)=>resolve(res))
-        .catch((err)=>reject(err))
+    return new Promise((resolve, reject) => {
+        axios.post('http://localhost:5000/patient/savepatientdetails', { userInfo })
+            .then((res) => resolve(res))
+            .catch((err) => reject(err))
+    })
+}
+
+export const getMedicines = (userId) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`http://localhost:5000/patient/medicines`, {
+            params: {
+                userId: userId
+            }
+        })
+            .then((response) => resolve(response.data))
+            .catch((err) => reject(err))
     })
 }
 
