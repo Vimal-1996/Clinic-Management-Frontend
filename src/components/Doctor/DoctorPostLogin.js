@@ -48,7 +48,7 @@ const DoctorPostLogin = () => {
         if(localStorage.getItem('appointmentData')){
          localStorage.removeItem('appointmentData')  
         }
-        navigate('/')
+        navigate('/',{replace:true})
     }
 
     return (

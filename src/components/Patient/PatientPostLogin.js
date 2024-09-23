@@ -11,19 +11,29 @@ const PatientPostLogin = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const [_id, setId] = useState("")
-    const [patientName, setPatientName] = useState("")
-    const [email, setEmail] = useState("")
+    const [id, setId] = useState(null)
+    const [patientName, setPatientName] = useState(null)
+    const [email, setEmail] = useState(null)
     const [toggle, setToggle] = useState(1);
 
     useEffect(() => {
-        setId(location.state ? location.state._id : {})
-        setPatientName(location.state ? location.state.patientName : {})
-        setEmail(location.state ? location.state.email : {})
-        Cookies.set("userId", _id)
-        Cookies.set("patientName",patientName)
-        Cookies.set("PatientEmail", email)
+        if(location.state){
+            setId(location.state ? location.state._id : "")
+            setPatientName(location.state ? location.state.patientName : "")
+            setEmail(location.state ? location.state.email : "")
+        }
     }, [location.state])
+
+    useEffect(()=>{
+        if(id && patientName && email){
+            Cookies.set("userId", id)
+            Cookies.set("patientName",patientName)
+            Cookies.set("PatientEmail", email)
+        }
+
+    },[id,patientName,email])
+
+
 
     function changeStatus(status) {
         setToggle(status)
@@ -37,7 +47,7 @@ const PatientPostLogin = () => {
         Cookies.remove("userId")
         Cookies.remove("patientName")
         Cookies.remove("PatientEmail")
-        navigate("/patient")
+        navigate("/patient",{replace:true})
 
     }
 
@@ -91,19 +101,19 @@ const PatientPostLogin = () => {
 
                 <div className='col-sm-9 '>
                     <div className=''>
-                        {toggle === 1 ? <MyAccountEdit data1={_id}/> : null}
+                        {toggle === 1 ? <MyAccountEdit data1={id}/> : null}
                     </div>
 
                     <div>
-                        {toggle === 2 ? <MyAppointments data1={_id}/> : null}
+                        {toggle === 2 ? <MyAppointments data1={id}/> : null}
                     </div>
 
                     <div>
-                        {toggle === 3 ? <MyRequests data1={_id}/> : null}
+                        {toggle === 3 ? <MyRequests data1={id}/> : null}
                     </div>
 
                     <div>
-                        {toggle === 4 ? <MyResults data1={_id}/> : null}
+                        {toggle === 4 ? <MyResults data1={id}/> : null}
                     </div>
                 </div>
 

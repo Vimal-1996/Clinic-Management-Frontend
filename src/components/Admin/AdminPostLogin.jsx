@@ -45,7 +45,7 @@ const AdminPostLogin = () => {
   
   function handleLogoutFunctionality(){
     deletecookie(getCookie().token)
-    navigate("/admin")
+    navigate("/admin",{replace:true})
   }
 
 
